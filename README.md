@@ -2,11 +2,7 @@
 
 Cross-browser extension that locks a tab to a home page and tracks that tab's browsing history from that point.
 
-[![CI](https://github.com/arronei/TabLocker/actions/workflows/ci.yml/badge.svg)](https://github.com/arronei/TabLocker/actions/workflows/ci.yml)
-[![Codecov](https://codecov.io/gh/arronei/TabLocker/branch/main/graph/badge.svg)](https://codecov.io/gh/arronei/TabLocker)
-[![Docs](https://img.shields.io/badge/docs-./docs-blue)](./docs)
-[![Release Notes](https://img.shields.io/badge/release%20notes-GitHub%20Releases-blue)](https://github.com/arronei/TabLocker/releases)
-[![Dashboards](https://img.shields.io/badge/dashboards-live-blue)](https://arronei.github.io/TabLocker/)
+[![CI](https://github.com/arronei/TabLocker/actions/workflows/ci.yml/badge.svg)](https://github.com/arronei/TabLocker/actions/workflows/ci.yml) [![Codecov](https://codecov.io/gh/arronei/TabLocker/branch/main/graph/badge.svg)](https://codecov.io/gh/arronei/TabLocker) [![Docs](https://img.shields.io/badge/docs-.%2Fdocs-blue)](./docs) [![Release Notes](https://img.shields.io/badge/release%20notes-GitHub%20Releases-blue)](https://github.com/arronei/TabLocker/releases) [![Dashboards](https://img.shields.io/badge/dashboards-live-blue)](https://arronei.github.io/TabLocker/)
 
 ## Overview
 
