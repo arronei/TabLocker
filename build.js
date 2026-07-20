@@ -20,7 +20,20 @@ const STATIC_FILES = [
   ["src/history/style.css", "history/style.css"],
 ];
 
-async function buildBrowser(browser) {
+const loadManifest = async (browser) => {
+  const base = JSON.parse(await readFile("manifest.json", "utf8"));
+  try {
+    const overlay = JSON.parse(await readFile(`manifest.${browser}.json`, "utf8"));
+    return { ...base, ...overlay };
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      throw err;
+    }
+    return base;
+  }
+};
+
+const buildBrowser = async (browser) => {
   const outDir = path.join(OUT_DIR, browser);
   await rm(outDir, { force: true, recursive: true });
   await mkdir(outDir, { recursive: true });
@@ -34,11 +47,13 @@ async function buildBrowser(browser) {
     target: "es2022",
   });
 
-  for (const [from, to] of STATIC_FILES) {
-    const dest = path.join(outDir, to);
-    await mkdir(path.dirname(dest), { recursive: true });
-    await cp(from, dest);
-  }
+  await Promise.all(
+    STATIC_FILES.map(async ([from, to]) => {
+      const dest = path.join(outDir, to);
+      await mkdir(path.dirname(dest), { recursive: true });
+      await cp(from, dest);
+    }),
+  );
 
   await cp("public/icons", path.join(outDir, "icons"), {
     filter: (src) => !src.endsWith(".gitkeep"),
@@ -47,20 +62,11 @@ async function buildBrowser(browser) {
 
   const manifest = await loadManifest(browser);
   await writeFile(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
-}
+};
 
-async function loadManifest(browser) {
-  const base = JSON.parse(await readFile("manifest.json", "utf8"));
-  try {
-    const overlay = JSON.parse(await readFile(`manifest.${browser}.json`, "utf8"));
-    return { ...base, ...overlay };
-  } catch (err) {
-    if (err.code !== "ENOENT") throw err;
-    return base;
-  }
-}
-
-for (const browser of BROWSERS) {
-  await buildBrowser(browser);
-  console.log(`built ${OUT_DIR}/${browser}`);
-}
+await Promise.all(
+  BROWSERS.map(async (browser) => {
+    await buildBrowser(browser);
+    console.log(`built ${OUT_DIR}/${browser}`);
+  }),
+);
