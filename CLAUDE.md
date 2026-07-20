@@ -57,15 +57,103 @@ package, no monorepo. Firefox is a real build target; Safari is out of scope for
 
 ## Behavioral guidelines
 
-- Write all code, identifiers, comments, and docs in US English.
-- Code comments are terse and only explain non-obvious WHY, not WHAT. Test files get more
-  explanatory comments than production code, since they double as behavior documentation - see
-  `src/background/url.test.ts` for the expected tone.
-- Lean-tooling bias: prefer stdlib/native/already-decided tooling over adding a new dependency.
-  Node's built-in test runner and c8 were chosen over Vitest/Jest for exactly this reason - don't
-  reintroduce a test framework or bundler without a strong reason.
-- `build.js` and every file under `src/**/*.ts` must start with the copyright header enforced by
+### 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+### 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+### 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+
+```pseudocode
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+## Dos and Don'ts
+
+### Do
+
+- Write code, identifiers, comments, and docs in American English everywhere - code, comments,
+  JSDoc, UI copy, commit messages (`color`, `behavior`, `center`, `canceled`, not `colour`,
+  `behaviour`, `centre`, `cancelled`).
+- Keep code comments terse, explaining only the WHY, not the WHAT - and only when the reason
+  isn't obvious from the code itself. Test files can carry more explanatory comments, since they
+  double as behavior documentation.
+- Prefer stdlib/native/already-decided tooling over adding a new dependency. Node's built-in test
+  runner and c8 were chosen over Vitest/Jest for exactly this reason - don't reintroduce a test
+  framework or bundler without a strong reason.
+- Start `build.js` and every file under `src/**/*.ts` with the copyright header enforced by
   `eslint-plugin-headers`: `// Copyright (C) Arron Eicholz. Licensed under the MIT License.`
   followed by a blank line.
-- Keep changes scoped to the single package layout; don't introduce a monorepo/workspaces
-  structure.
+- Style elements with CSS classes, in the stylesheet colocated with the view (e.g.
+  `src/popup/style.css`, `src/history/style.css`).
+- Give every function in a `.ts` file a JSDoc block, with a `@param` line per argument and a
+  `@returns`, so VSCode surfaces parameter help on hover and at the call site. A component's props
+  are documented by its `Props` interface, so the component's own JSDoc needs only a summary, not
+  a `@param` per prop.
+
+### Don't
+
+- Don't introduce a monorepo/workspaces structure - keep changes scoped to the single package
+  layout.
+- Don't add comments to CSS files.
+- Don't use inline styles.
+- Don't add inline code comments unless the logic is genuinely complex or unusual.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

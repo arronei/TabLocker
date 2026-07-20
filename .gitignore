@@ -13,6 +13,10 @@ test-results/
 # generated dashboards (published to GitHub Pages by CI, not hand-authored)
 dashboards/
 
+# generated graphify knowledge graph - regenerate with the graphify skill;
+# includes machine-local absolute paths (.graphify_python, .graphify_root)
+graphify-out/
+
 # logs
 *.log
 npm-debug.log*
@@ -26,6 +30,7 @@ Thumbs.db
 # editor
 .vscode/
 .idea/
+.claude/worktrees/
 
 # env
 .env

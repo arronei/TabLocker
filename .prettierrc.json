@@ -1,6 +1,6 @@
 {
-  "printWidth": 100,
+  "attributeSort": "ASC",
   "endOfLine": "auto",
   "plugins": ["prettier-plugin-organize-attributes"],
-  "attributeSort": "ASC"
+  "printWidth": 100
 }
