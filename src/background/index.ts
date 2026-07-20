@@ -1,2 +1,3 @@
-// ponytail: placeholder service worker; tab-tracking logic lands via GitHub Issues after scaffolding.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 export {};

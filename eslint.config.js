@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
+import headers from "eslint-plugin-headers";
 import perfectionist from "eslint-plugin-perfectionist";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -56,6 +57,22 @@ export default tseslint.config(
       "sort-keys": ["error", "asc", { caseSensitive: true, natural: false }],
       "sort-vars": "error",
       "vars-on-top": "error",
+    },
+  },
+  {
+    files: ["build.js", "src/**/*.ts"],
+    plugins: { headers },
+    rules: {
+      "headers/header-format": [
+        "error",
+        {
+          content: "Copyright (C) {company}. Licensed under the MIT License.",
+          source: "string",
+          style: "line",
+          trailingNewlines: 2,
+          variables: { company: "Arron Eicholz" },
+        },
+      ],
     },
   },
   {
