@@ -24,9 +24,12 @@ export const test = base.extend<{ context: BrowserContext; extensionId: string }
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
+        // Passing new headless Chromium's flag directly - rather than
+        // Playwright's own `headless: true` - is what actually loads
+        // extensions; Playwright's headless mode still doesn't. No display
+        // server (xvfb) needed in CI with this approach.
+        "--headless=new",
       ],
-      // Old headless Chromium doesn't load extensions; ticket #14's CI job
-      // needs xvfb (or an equivalent virtual display) to run this headed.
       headless: false,
     });
     await use(context);
