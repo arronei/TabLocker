@@ -1,2 +1,3 @@
-// ponytail: placeholder full history page, reached via the popup's "Open history page". See #27.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 export {};

@@ -1,2 +1,3 @@
-// ponytail: placeholder home-menu view (Go Home / History / About / Set Home Page / Edit Homepage). See #27.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 export {};

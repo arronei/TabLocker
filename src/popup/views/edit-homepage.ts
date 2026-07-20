@@ -1,2 +1,3 @@
-// ponytail: placeholder edit-homepage view (URL textbox + Save). See #27.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 export {};

@@ -1,2 +1,3 @@
-// ponytail: placeholder quick-history view (search + flat "All" list). See #27.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 export {};

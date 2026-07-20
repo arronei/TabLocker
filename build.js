@@ -1,5 +1,5 @@
-// Hand-rolled build: bundles each entry point with esbuild and assembles a per-browser dist/<browser>
-// folder (manifest + static HTML/CSS/icons). No bundler plugin ecosystem - see issue #2 for why.
+// Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
 import { build } from "esbuild";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
