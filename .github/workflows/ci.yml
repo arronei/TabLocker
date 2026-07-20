@@ -28,4 +28,7 @@ jobs:
       - run: yarn build
 
       - run: yarn playwright install --with-deps chromium
-      - run: yarn test:e2e
+      # Calls the playwright binary directly, bypassing the "pretest:e2e"
+      # script hook - dist/chrome was already built by the "yarn build" step
+      # above, so rebuilding here would just be duplicate work.
+      - run: yarn playwright test
