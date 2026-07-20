@@ -24,8 +24,17 @@ jobs:
 
       - run: yarn lint
       - run: yarn typecheck
-      - run: yarn test:unit
+      - run: yarn test:unit:coverage
       - run: yarn build
+
+      - uses: codecov/codecov-action@v5
+        with:
+          # Public repo: works tokenless once "Global Upload Token" is enabled
+          # for the org at codecov.io; CODECOV_TOKEN secret is optional but
+          # more reliable if the repo owner sets one up.
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: true
 
       - run: yarn playwright install --with-deps chromium
       # Calls the playwright binary directly, bypassing the "pretest:e2e"
