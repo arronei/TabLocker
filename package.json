@@ -16,7 +16,7 @@
     "lint": "eslint . && stylelint \"src/**/*.css\"",
     "lint:ext": "web-ext lint --source-dir dist/firefox",
     "test:unit": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
-    "test:unit:coverage": "c8 --reporter=lcov --reporter=html --reporter=text yarn test:unit",
+    "test:unit:coverage": "c8 --reporter=lcov --reporter=text yarn test:unit",
     "pretest:e2e": "yarn build",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
