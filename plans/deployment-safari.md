@@ -21,10 +21,11 @@ Before starting, confirm all of the following are in place:
 - Access to [App Store Connect](https://appstoreconnect.apple.com) under the same Apple Developer
   account/team that will own the app record.
 - A built, working extension output from this repo. The converter works from `build/`-style
-  output directories, so run `yarn build` first and point the converter at `dist/chrome` (or
-  `dist/firefox` — either is close enough to a standard WebExtension layout; `dist/chrome` is the
-  more conservative starting point since Safari's extension APIs trace closer to the Chromium
-  WebExtensions model).
+  output directories, so run `yarn build` first and point the converter at `dist/chrome`. Use
+  `dist/chrome`, not `dist/firefox`: this repo's `dist/firefox` manifest is merged with
+  `manifest.firefox.json`, which adds Firefox-only keys (e.g. `browser_specific_settings.gecko`)
+  that don't apply to Safari and shouldn't be carried into the converter input. `dist/chrome`'s
+  manifest is closer to Safari's Chromium-leaning WebExtensions support and avoids that problem.
 
 ## 2. Converting the extension
 
@@ -36,7 +37,8 @@ High-level steps:
 
 1. Build the extension normally from the repo root: `yarn build`. This produces `dist/chrome` and
    `dist/firefox`.
-2. Run the converter against the chosen output directory, e.g.:
+2. Run the converter against `dist/chrome` (see the prerequisites above for why `dist/chrome`
+   rather than `dist/firefox` is the right input here):
    ```
    safari-web-extension-converter dist/chrome
    ```
@@ -74,8 +76,11 @@ Once the project is generated, configure it in Xcode before it can be signed, ru
   version before finalizing, since some WebExtensions APIs were added in specific Safari/macOS
   releases.
 - **App icons and metadata**: Xcode's generated project includes placeholder app icon slots and
-  an `Info.plist` for the container app; these need real icons (reuse/adapt the icons already in
-  `public/icons`) and accurate display name, version, and build number before archiving.
+  an `Info.plist` for the container app; these need real icons and accurate display name, version,
+  and build number before archiving. Note that `public/icons` in this repo currently contains only
+  a `.gitkeep` placeholder (it's copied into `dist/<browser>/icons` by `build.js`'s icon-copy
+  step, but no actual icon assets exist there yet) — producing real app icon artwork is a
+  prerequisite task in its own right, not something that can be reused from this repo today.
 
 ## 4. Manifest/API compatibility caveats
 
@@ -126,10 +131,12 @@ Safari) before submitting for review, not discovered during App Review.
    content or popup) to view console output and debug the extension's scripts running inside
    Safari, similar to Chrome/Firefox devtools.
 5. Exercise the extension's actual functionality (locking a tab, tracking that tab's history)
-   manually inside Safari, since this repo's existing Playwright e2e suite (`playwright.config.ts`,
-   `e2e/`) targets Chromium/Firefox and does not run against Safari/WebKit extension contexts —
-   Safari testing here is expected to be manual through Xcode/Safari's tooling rather than folded
-   into the existing automated e2e run.
+   manually inside Safari. This repo's existing Playwright e2e suite (`playwright.config.ts`,
+   `e2e/`) currently only launches Chromium against the unpacked `dist/chrome` extension (see
+   `e2e/fixtures.ts`) — it does not run against Firefox, Safari/WebKit, or any other browser today.
+   Extending it to cover Safari/WebKit extension contexts is out of scope for this plan; Safari
+   testing here is expected to be manual through Xcode/Safari's tooling rather than folded into
+   the existing automated e2e run.
 
 ## 6. App Store Connect submission
 
