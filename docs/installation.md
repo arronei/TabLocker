@@ -3,6 +3,8 @@
 TabLocker isn't published to any extension store yet. To try it, build it locally and load it as
 an unpacked/temporary extension.
 
+**Prerequisite:** Node.js 22 or later (see `engines.node` in `package.json`).
+
 ## Build
 
 ```sh
