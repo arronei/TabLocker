@@ -9,8 +9,8 @@ const BROWSERS = ["chrome", "firefox"];
 
 const ENTRY_POINTS = {
   "background/index": "src/background/index.ts",
-  "popup/index": "src/popup/index.ts",
   "history/index": "src/history/index.ts",
+  "popup/index": "src/popup/index.ts",
 };
 
 const STATIC_FILES = [
@@ -19,6 +19,35 @@ const STATIC_FILES = [
   ["src/history/index.html", "history/index.html"],
   ["src/history/style.css", "history/style.css"],
 ];
+
+async function buildBrowser(browser) {
+  const outDir = path.join(OUT_DIR, browser);
+  await rm(outDir, { force: true, recursive: true });
+  await mkdir(outDir, { recursive: true });
+
+  await build({
+    bundle: true,
+    entryPoints: ENTRY_POINTS,
+    format: "esm",
+    outdir: outDir,
+    sourcemap: true,
+    target: "es2022",
+  });
+
+  for (const [from, to] of STATIC_FILES) {
+    const dest = path.join(outDir, to);
+    await mkdir(path.dirname(dest), { recursive: true });
+    await cp(from, dest);
+  }
+
+  await cp("public/icons", path.join(outDir, "icons"), {
+    filter: (src) => !src.endsWith(".gitkeep"),
+    recursive: true,
+  });
+
+  const manifest = await loadManifest(browser);
+  await writeFile(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+}
 
 async function loadManifest(browser) {
   const base = JSON.parse(await readFile("manifest.json", "utf8"));
@@ -29,35 +58,6 @@ async function loadManifest(browser) {
     if (err.code !== "ENOENT") throw err;
     return base;
   }
-}
-
-async function buildBrowser(browser) {
-  const outDir = path.join(OUT_DIR, browser);
-  await rm(outDir, { recursive: true, force: true });
-  await mkdir(outDir, { recursive: true });
-
-  await build({
-    entryPoints: ENTRY_POINTS,
-    outdir: outDir,
-    bundle: true,
-    format: "esm",
-    target: "es2022",
-    sourcemap: true,
-  });
-
-  for (const [from, to] of STATIC_FILES) {
-    const dest = path.join(outDir, to);
-    await mkdir(path.dirname(dest), { recursive: true });
-    await cp(from, dest);
-  }
-
-  await cp("public/icons", path.join(outDir, "icons"), {
-    recursive: true,
-    filter: (src) => !src.endsWith(".gitkeep"),
-  });
-
-  const manifest = await loadManifest(browser);
-  await writeFile(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
 }
 
 for (const browser of BROWSERS) {
