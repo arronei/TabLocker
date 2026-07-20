@@ -1,16 +1,35 @@
 import js from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
 import headers from "eslint-plugin-headers";
+import json from "eslint-plugin-jsonc";
 import perfectionist from "eslint-plugin-perfectionist";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist/**", "node_modules/**", "coverage/**", "dashboards/**"] },
+  {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "coverage/**",
+      "dashboards/**",
+      "graphify-out/**",
+      "test-results/**",
+      "playwright-report/**",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   perfectionist.configs["recommended-natural"],
+  ...json.configs["flat/recommended-with-json"],
   prettierConfig,
+  {
+    files: ["**/*.json", "**/*.jsonc", "**/*.json5"],
+    plugins: { json },
+    rules: {
+      "jsonc/sort-keys": ["error", "asc", { caseSensitive: true, natural: false }],
+    },
+  },
   {
     rules: {
       camelcase: "error",
