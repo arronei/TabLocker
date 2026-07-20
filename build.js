@@ -46,18 +46,13 @@ async function buildBrowser(browser) {
   });
 
   const manifest = await loadManifest(browser);
-  await writeFile(
-    path.join(outDir, "manifest.json"),
-    JSON.stringify(manifest, null, 2),
-  );
+  await writeFile(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
 }
 
 async function loadManifest(browser) {
   const base = JSON.parse(await readFile("manifest.json", "utf8"));
   try {
-    const overlay = JSON.parse(
-      await readFile(`manifest.${browser}.json`, "utf8"),
-    );
+    const overlay = JSON.parse(await readFile(`manifest.${browser}.json`, "utf8"));
     return { ...base, ...overlay };
   } catch (err) {
     if (err.code !== "ENOENT") throw err;

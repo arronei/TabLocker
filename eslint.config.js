@@ -11,6 +11,19 @@ export default tseslint.config(
   perfectionist.configs["recommended-natural"],
   prettierConfig,
   {
+    rules: {
+      "perfectionist/sort-imports": [
+        "error",
+        {
+          groups: ["external", ["parent", "sibling", "index"]],
+          newlinesBetween: 1,
+          order: "asc",
+          type: "natural",
+        },
+      ],
+    },
+  },
+  {
     files: ["build.js"],
     languageOptions: { globals: globals.node },
   },
