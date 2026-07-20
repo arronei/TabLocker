@@ -1,0 +1,23 @@
+{
+  "name": "tablocker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cross-browser extension that locks a tab to a home page and tracks that tab's browsing history from that point.",
+  "repository": "https://github.com/arronei/TabLocker.git",
+  "author": "Arron Eicholz <arronei@me.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.12.0"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

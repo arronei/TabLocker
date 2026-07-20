@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "TabLocker",
+  "version": "0.1.0",
+  "description": "Locks a tab to a home page and tracks that tab's history from that point.",
+  "action": {
+    "default_popup": "popup/index.html"
+  },
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "tabs"]
+}
