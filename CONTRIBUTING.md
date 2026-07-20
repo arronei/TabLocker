@@ -36,7 +36,11 @@ Any new file under `src/**/*.ts` (or `build.js`) must start with:
 
 ```ts
 // Copyright (C) Arron Eicholz. Licensed under the MIT License.
+
+export {};
 ```
+
+Note the blank line after the copyright comment — `eslint-plugin-headers` is configured with `trailingNewlines: 2`, so a header without a blank line after it will fail `yarn lint`.
 
 This is enforced by `eslint-plugin-headers` (see `eslint.config.js`); `yarn lint` will fail without it.
 
@@ -70,12 +74,12 @@ This isn't just style — `release-please` reads the commit history on `main` to
 
 ## Before opening a PR
 
-CI runs `yarn lint`, `yarn typecheck`, `yarn test:unit:coverage`, `yarn build`, and `yarn test:e2e` on every PR. Run these locally first so you catch failures before pushing:
+CI runs `yarn lint`, `yarn typecheck`, `yarn test:unit:coverage`, `yarn build`, and then `yarn playwright test` on every PR (CI calls the Playwright binary directly rather than `yarn test:e2e`, since `test:e2e`'s `pretest:e2e` hook would rebuild `dist/chrome` a second time after the `yarn build` step already built it). Run these locally first so you catch failures before pushing:
 
 ```sh
 yarn lint
 yarn typecheck
 yarn test:unit:coverage
 yarn build
-yarn test:e2e
+yarn playwright test
 ```
