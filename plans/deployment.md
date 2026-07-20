@@ -54,7 +54,7 @@ Run this before starting any store submission, and repeat it for every subsequen
    - `yarn typecheck` (`tsc --noEmit`)
    - `yarn test:unit:coverage` (or `yarn test:unit` for a quicker pass)
    - `yarn build`
-   - optionally `yarn playwright install --with-deps chromium && yarn playwright test` for
+   - optionally `yarn playwright install --with-deps chromium && yarn test:e2e` for
      the e2e suite (this also implicitly rebuilds `dist/chrome` via the `pretest:e2e` hook)
 3. **Run the Firefox extension linter** against the built Firefox output:
    ```
@@ -71,8 +71,8 @@ Run this before starting any store submission, and repeat it for every subsequen
      select `dist/chrome` (Edge uses the same Chromium package, so no separate `dist/edge`
      build is needed).
    - **Firefox**: `about:debugging#/runtime/this-firefox` → "Load Temporary Add-on" →
-     select `dist/firefox/manifest.json`. (Alternatively `yarn dlx web-ext run
---source-dir dist/firefox` for a live-reloading dev session.)
+     select `dist/firefox/manifest.json`. (Alternatively
+     `yarn dlx web-ext run --source-dir dist/firefox` for a live-reloading dev session.)
    - In each browser, verify: the popup opens and locks a tab, the history page renders
      and shows tracked history, the extension icon/badge appears correctly, and there are
      no console errors in the service worker / background context.
