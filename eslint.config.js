@@ -43,29 +43,19 @@ export default tseslint.config(
       "perfectionist/sort-imports": [
         "error",
         {
-          groups: ["external", ["parent", "sibling", "index"]],
-          newlinesBetween: 1,
-          order: "asc",
-          type: "natural",
-        },
-      ],
-      "perfectionist/sort-intersection-types": [
-        "error",
-        {
-          groups: [
-            "conditional",
-            "function",
-            "import",
-            "intersection",
-            "keyword",
-            "literal",
-            "named",
-            "object",
-            "operator",
-            "tuple",
-            "union",
-            "nullish",
+          customGroups: [
+            { elementNamePattern: "\\.json$", groupName: "json" },
+            { elementNamePattern: "shared.*.css", groupName: "sharedStyles" },
           ],
+          groups: [
+            "external",
+            "internal",
+            ["parent", "sibling", "index"],
+            "json",
+            "sharedStyles",
+            "style",
+          ],
+          newlinesBetween: 1,
           order: "asc",
           type: "natural",
         },
@@ -104,6 +94,29 @@ export default tseslint.config(
     files: ["src/**/*.ts"],
     languageOptions: {
       globals: { ...globals.browser, ...globals.webextensions },
+    },
+    rules: {
+      "perfectionist/sort-intersection-types": [
+        "error",
+        {
+          groups: [
+            "conditional",
+            "function",
+            "import",
+            "intersection",
+            "keyword",
+            "literal",
+            "named",
+            "object",
+            "operator",
+            "tuple",
+            "union",
+            "nullish",
+          ],
+          order: "asc",
+          type: "natural",
+        },
+      ],
     },
   },
 );
